@@ -1,0 +1,2 @@
+# This project uses only Python standard libraries.
+# Tested with Python 3.8+
