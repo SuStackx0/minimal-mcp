@@ -14,13 +14,20 @@ capabilities a model would be given. Run it from the repo root:
 """
 
 import asyncio
+import os
+import sys
 
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 
 # How to start the server process. This mirrors a Claude Desktop config entry:
 #   { "command": "python", "args": ["examples/server.py"] }
-server = StdioServerParameters(command="python", args=["examples/server.py"])
+# We use sys.executable (not bare "python") so the server runs under the SAME
+# interpreter/venv as this client — otherwise it may not find the mcp package.
+_HERE = os.path.dirname(os.path.abspath(__file__))
+server = StdioServerParameters(
+    command=sys.executable, args=[os.path.join(_HERE, "server.py")]
+)
 
 
 async def main() -> None:
@@ -53,8 +60,8 @@ async def main() -> None:
             )
 
             print("\n-- reading resource notes://all --")
-            content, _ = await session.read_resource("notes://all")
-            print(content)
+            resource = await session.read_resource("notes://all")
+            print(resource.contents[0].text)
 
             print("\n-- rendering prompt summarize_notes --")
             prompt = await session.get_prompt("summarize_notes", {"style": "one line"})
