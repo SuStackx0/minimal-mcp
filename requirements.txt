@@ -1,2 +1,4 @@
-# This project uses only Python standard libraries.
-# Tested with Python 3.8+
+# raw/ examples use only the Python standard library (3.8+).
+#
+# examples/ use the official MCP Python SDK:
+mcp[cli]>=1.2.0
